@@ -1,2 +1,42 @@
 ---
-# tasks file for .
+- name: dnf Update
+  command: dnf -y update
+
+- name: Basic packages
+  package:
+    name: "{{ packages }}"
+    state: present
+  vars:
+    packages:
+      - vim
+      - wget
+      - bash-completion
+      - epel-release
+
+- name: Bash Profile
+  template:
+    src: etc/profile.d/zz_ec.sh
+    dest: /etc/profile.d/zz_ec.sh
+
+- name: Locale
+  copy:
+    content: |
+      LANG=en_GB.utf8
+      export LANG
+      LC_ALL=en_GB.UTF-8
+      export LC_ALL
+    dest: /etc/profile.d/zz_locale.sh
+
+- name: Timezone
+  command: timedatectl set-timezone Europe/London
+
+- name: Passwordless Wheel Sudo
+  lineinfile:
+    path: /etc/sudoers
+    state: present
+    regexp: "^.+?%wheel"
+    line: "%wheel	ALL=(ALL)	NOPASSWD: ALL"
+    validate: '/usr/sbin/visudo -cf %s'
+
+- name: Set hostname to match ansible hostname
+  command: hostnamectl set-hostname "{{ inventory_hostname }}"
