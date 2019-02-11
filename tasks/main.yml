@@ -11,7 +11,7 @@
       - vim
       - wget
       - bash-completion
-      - epel-release
+
 
 - name: Bash Profile
   template:
@@ -30,13 +30,20 @@
 - name: Timezone
   command: timedatectl set-timezone Europe/London
 
-- name: Passwordless Wheel Sudo
-  lineinfile:
-    path: /etc/sudoers
-    state: present
-    regexp: "^.+?%wheel"
-    line: "%wheel	ALL=(ALL)	NOPASSWD: ALL"
-    validate: '/usr/sbin/visudo -cf %s'
+#- name: Passwordless Wheel Sudo
+#  lineinfile:
+#    path: /etc/sudoers
+#    state: present
+#    regexp: "^.+?%wheel"
+#    line: "%wheel	ALL=(ALL)	NOPASSWD: ALL"
+#    validate: '/usr/sbin/visudo -cf %s'
 
 - name: Set hostname to match ansible hostname
   command: hostnamectl set-hostname "{{ inventory_hostname }}"
+
+- name: gsettings
+  shell: |
+    gsettings set org.gnome.settings-daemon.plugins.xsettings antialiasing "rgba"
+    gsettings set org.gnome.settings-daemon.plugins.xsettings hinting "slight"
+
+
