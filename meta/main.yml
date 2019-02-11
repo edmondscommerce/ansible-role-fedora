@@ -58,7 +58,7 @@ galaxy_info:
     #       Maximum 20 tags per role.
 
 dependencies:
-  - role: jaredhocutt.gnome-extensions
+  - role: jaredhocutt.gnome_extensions
     vars:
       gnome_extension_ids:
         # https://extensions.gnome.org/extension/921/multi-monitors-add-on/
