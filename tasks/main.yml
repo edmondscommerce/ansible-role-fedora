@@ -6,6 +6,7 @@
 
 - name: dnf Update
   command: dnf -y update
+  when: skip_dnf_update is not defined
 
 - name: Basic packages
   package:
@@ -17,6 +18,7 @@
       - wget
       - bash-completion
       - python2-libselinux
+      - gnome-tweak-tool
 
 
 - name: Bash Profile
