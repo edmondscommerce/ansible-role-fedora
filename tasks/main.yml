@@ -1,4 +1,9 @@
 ---
+- name: "Check required variables"
+  fail: msg="Variable '{{ item }}' is not defined"
+  when: item not in vars
+  with_items: "{{required_vars}}"
+
 - name: dnf Update
   command: dnf -y update
 
@@ -11,6 +16,7 @@
       - vim
       - wget
       - bash-completion
+      - python2-libselinux
 
 
 - name: Bash Profile

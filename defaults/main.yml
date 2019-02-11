@@ -1,1 +1,12 @@
 ---
+required_vars:
+  - users_name
+
+users_name:
+default_gnome_extensions:
+  - name: "activities configurator"
+    url: "https://extensions.gnome.org/extension-data/activities-confignls1729.v69.shell-extension.zip"
+  - name: "multi-monitors-add-on"
+    url: "https://extensions.gnome.org/extension-data/multi-monitors-add-on%40spin83.v17.shell-extension.zip"
+  - name: "topicons"
+    url:

@@ -1,0 +1,4 @@
+---
+#- name: Run the Customise Gnome Role
+  #import_role:
+    #name: customize-gnome

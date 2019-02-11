@@ -1,2 +1,3 @@
 ---
 # vars file for .
+gnome_user: "{{ users_name | mandatory }}"
