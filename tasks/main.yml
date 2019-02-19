@@ -81,4 +81,8 @@
     semanage port -a -t ssh_port_t -p tcp {{ ssh_port }}
     systemctl restart sshd
 
+- name: Ensure we are now using the updated SSH port
+  set_fact:
+    ansible_port: "{{ ssh_port }}"
+
 
