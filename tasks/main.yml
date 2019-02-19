@@ -19,6 +19,7 @@
       - bash-completion
       - python2-libselinux
       - gnome-tweak-tool
+      - htop
 
 
 - name: Bash Profile
@@ -53,5 +54,31 @@
   shell: |
     gsettings set org.gnome.settings-daemon.plugins.xsettings antialiasing "rgba"
     gsettings set org.gnome.settings-daemon.plugins.xsettings hinting "slight"
+
+- name: Harden SSH
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    line: "{{ item.line }}"
+    regexp: "{{ item.regexp | default(omit) }}"
+    state: "{{ item.state | default('present') }}"
+    validate: '/usr/sbin/sshd -T -f %s'
+  with_items:
+    - line: AllowUsers {{ users_name }} {{ ansible_ssh_user }}
+    - line: Port {{ ssh_port }}
+      regexp: "#Port"
+    - line: AddressFamily inet
+      regexp: "^#AddressFamily"
+    - line: PermitRootLogin yes
+      regexp: "^PermitRootLogin"
+    - line: X11Forwarding no
+      regexp: "^X11Forwarding"
+    - line: UseDNS no
+      regexp: "^#UseDNS"
+
+
+- name: Update SE Linux for SSH Port
+  shell: |
+    semanage port -a -t ssh_port_t -p tcp {{ ssh_port }}
+    systemctl restart sshd
 
 
