@@ -23,9 +23,19 @@
 
 
 - name: Bash Profile
-  template:
-    src: etc/profile.d/zz_ec.sh
+  copy:
+    src: ./../templates/etc/profile.d/zz_ec.sh
     dest: /etc/profile.d/zz_ec.sh
+
+- name: Vimrc
+  copy:
+    src: ./../templates/etc/vimrc
+    dest: /etc/vimrc
+
+- name: Vim colour scheme
+  copy:
+    src: ./../templates/usr/share/vim/vimfiles/colors/deus.vim
+    dest: /usr/share/vim/vimfiles/colors/deus.vim
 
 - name: Locale
   copy:
@@ -39,13 +49,13 @@
 - name: Timezone
   command: timedatectl set-timezone Europe/London
 
-#- name: Passwordless Wheel Sudo
-#  lineinfile:
-#    path: /etc/sudoers
-#    state: present
-#    regexp: "^.+?%wheel"
-#    line: "%wheel	ALL=(ALL)	NOPASSWD: ALL"
-#    validate: '/usr/sbin/visudo -cf %s'
+- name: Passwordless Wheel Sudo
+  lineinfile:
+    path: /etc/sudoers
+    state: present
+    regexp: "^.+?%wheel"
+    line: "%wheel	ALL=(ALL)	NOPASSWD: ALL"
+    validate: '/usr/sbin/visudo -cf %s'
 
 - name: Set hostname to match ansible hostname
   command: hostnamectl set-hostname "{{ inventory_hostname }}"
