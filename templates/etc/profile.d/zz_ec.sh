@@ -25,18 +25,18 @@ export HISTIGNORE="&:ls:[bf]g:exit"
 if [[ $- == *i* ]]
 then
 
-#    #SSH Agent
-#    if [ -z "$SSH_AUTH_SOCK" ] ; then
-#        inTemp=$(find /tmp -maxdepth 2 -type s -name "agent*" -user $USER -printf '%T@ %p\n' 2>/dev/null |sort -n|tail -1|cut -d' ' -f2)
-#        if [[ "" != "$inTemp" ]]
-#        then
-#            SSH_AUTH_SOCK="$inTemp"
-#            export SSH_AUTH_SOCK
-#        else
-#            eval `ssh-agent -s`
-#            ssh-add
-#        fi
-#    fi
+    #SSH Agent
+    if [ -z "$SSH_AUTH_SOCK" ] ; then
+        inTemp=$(find /tmp -maxdepth 2 -type s -name "agent*" -user $USER -printf '%T@ %p\n' 2>/dev/null |sort -n|tail -1|cut -d' ' -f2)
+        if [[ "" != "$inTemp" ]]
+        then
+            SSH_AUTH_SOCK="$inTemp"
+            export SSH_AUTH_SOCK
+        else
+            eval `ssh-agent -s`
+            ssh-add
+        fi
+    fi
 
     #Prompt
     function redPrompt(){

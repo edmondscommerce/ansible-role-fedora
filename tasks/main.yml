@@ -21,7 +21,6 @@
       - gnome-tweak-tool
       - htop
 
-
 - name: Bash Profile
   copy:
     src: ./../templates/etc/profile.d/zz_ec.sh
@@ -45,6 +44,12 @@
       LC_ALL=en_GB.UTF-8
       export LC_ALL
     dest: /etc/profile.d/zz_locale.sh
+
+- name: Dont Send Locale over SSH
+  replace:
+    path: /etc/ssh/ssh_config.d/05-redhat.conf
+    regexp: '^   SendEnv'
+    replace: '#   SendEnv'
 
 - name: Timezone
   command: timedatectl set-timezone Europe/London
@@ -84,13 +89,6 @@
       regexp: "^X11Forwarding"
     - line: UseDNS no
       regexp: "^#UseDNS"
-
-- name: Dont Send Locale over SSH
-  replace:
-    path: /etc/ssh/ssh_config.d/05-redhat.conf
-    regexp: '^   SendEnv'
-    replace: '#   SendEnv'
-
 
 - name: Update SE Linux for SSH Port
   shell: |
