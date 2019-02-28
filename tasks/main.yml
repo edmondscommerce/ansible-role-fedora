@@ -53,7 +53,7 @@
   lineinfile:
     path: /etc/sudoers
     state: present
-    regexp: "^.+?%wheel"
+    regexp: "^%wheel"
     line: "%wheel	ALL=(ALL)	NOPASSWD: ALL"
     validate: '/usr/sbin/visudo -cf %s'
 
@@ -84,6 +84,12 @@
       regexp: "^X11Forwarding"
     - line: UseDNS no
       regexp: "^#UseDNS"
+
+- name: Dont Send Locale over SSH
+  replace:
+    path: /etc/ssh/ssh_config.d/05-redhat.conf
+    regexp: '^   SendEnv'
+    replace: '#   SendEnv'
 
 
 - name: Update SE Linux for SSH Port
