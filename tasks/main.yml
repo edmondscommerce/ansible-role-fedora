@@ -51,6 +51,12 @@
     regexp: '^[^#]+?SendEnv'
     replace: '#   SendEnv'
 
+- name: Keep SSH Auth Sock when using Sudo
+  copy:
+    dest: /etc/sudoers.d/keep-auth-sock
+    content: |
+      Defaults    env_keep+=SSH_AUTH_SOCK
+
 - name: Timezone
   command: timedatectl set-timezone Europe/London
 
