@@ -126,10 +126,13 @@ vmap jj <esc>
 " type cd in normal mode to switch the pwd to that of the file
 nmap <silent> cd :cd %:h<CR>
 
+" ====== Markdown =================================
 " For some reason vim doesn't recognise md files as markdown. Lets correct that
 au BufNewFile,BufRead *.md set filetype=markdown
 " And add syntax highlighting for code blocks
 let g:markdown_fenced_languages = ['bash=sh', 'css', 'django', 'javascript', 'js=javascript', 'json=javascript', 'perl', 'php', 'python', 'ruby', 'sass', 'xml', 'html']
+" And wrap text when editing markdown
+au BufRead,BufNewFile *.md setlocal wrap linebreak nolist
 
 " ====== Default nice colour scheme ===============
 colors deus
