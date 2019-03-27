@@ -1,3 +1,8 @@
+### --pre
+
+
+### --main
+
 # User specific aliases and functions
 
 alias rm='rm -i'
@@ -19,7 +24,24 @@ export HISTFILESIZE=20000
 export HISTSIZE=10000
 export HISTIGNORE="&:ls:[bf]g:exit"
 
+# Add different directories to the $PATH if they exist
+## Local bin folder
+if [[ -d ~/bin/ ]];
+then
+    PATH="$PATH:$HOME/bin"
+fi
 
+# Composer global install
+if [[ -d ~/.config/composer/vendor/bin/ ]];
+then
+    PATH="$PATH:$HOME/.config/composer/vendor/bin/"
+fi
+
+# RVM bin folder
+if [[ -d ~/.rvm/bin ]];
+then
+    PATH=$PATH:$HOME/.rvm/bin
+fi
 
 # Settings for interactive shell only inside this block
 if [[ $- == *i* ]]
@@ -33,8 +55,13 @@ then
             SSH_AUTH_SOCK="$inTemp"
             export SSH_AUTH_SOCK
         else
-            eval `ssh-agent -s`
-            ssh-add
+            if command -v keychain >/dev/null 2>&1;
+            then
+                eval `keychain -q --eval id_dsa id_rsa`
+            else
+                eval `ssh-agent -s`
+                ssh-add
+            fi
         fi
     fi
 
@@ -68,11 +95,25 @@ then
 
     ## To install
     ## dnf -y install bash-completion
-    [[ $PS1 && -f /usr/share/bash-completion/bash_completion ]] && \
-        . /usr/share/bash-completion/bash_completion
+    source /usr/share/bash-completion/bash_completion
+    for f in /usr/share/bash-completion/completions/*; do
+        source $f 2> /dev/null
+    done
 
     export EDITOR=vim
     alias vi="vim"
+
+    # Lets keep all of the aliases in one place
+    if [[ -f ~/.bash_aliases ]];
+    then
+        . ~/.bash_aliases
+    fi
+
+    # And keep functions split out as well
+    if [[ -f ~/.bash_functions.bash ]];
+    then
+        . ~/.bash_functions.bash
+    fi
 fi
 
 # Moves up a number of dirs
@@ -128,3 +169,65 @@ function extract {
 fi
 }
 
+# Fix legacy code
+camelCase() {
+  vim -E -s $@ <<-EOF
+  :%s#\%($\%(\k\+\)\)\@<=_\(\k\)#\u\1#g
+  :update
+  :quit
+EOF
+}
+# Read a csv file in a useful way
+readCsv() {
+
+  if [[ -z $2 ]]
+  then
+    LINE_NUMBER=2
+  else
+    LINE_NUMBER=$2
+  fi
+
+  if [[ -z $3 ]]
+  then
+    FIELD_SEPERATOR=','
+  else
+    FIELD_SEPERATOR=$3
+  fi
+
+  ( echo "Header Value" ; paste <( head -n 1 $1 | sed 's#'$FIELD_SEPERATOR'#\n#g' ) <( head -n $LINE_NUMBER $1 | tail -n 1 | sed 's#'$FIELD_SEPERATOR'#\n#g') ) | column -t
+}
+# http_headers: get just the HTTP headers from a web page (and its redirects)
+http_headers () {
+  /usr/bin/curl -I -L $@ ;
+
+}
+
+# debug_http: download a web page and show info on what took time
+debug_http () {
+  /usr/bin/curl $@ -o /dev/null -w "dns: %{time_namelookup} connect: %{time_connect} pretransfer: %{time_pretransfer} starttransfer: %{time_starttransfer} total: %{time_total}\n" ;
+}
+# showa: to remind yourself of an alias (given some part of it)
+showa () {
+  grep -i -a1 $@ ~/.bash_aliases | grep -v '^\s*$' ;
+}
+
+# getcolumn: extract a particular column of space-separated output
+# e.g.: lsof | getcolumn 0 | sort | uniq
+getcolumn () {
+  perl -ne '@cols = split; print "$cols['$1']\n"' ;
+}
+
+ticker() {
+  i=1;
+  sp="/-\|";
+  echo -n ' ';
+  while true;
+  do
+    printf "\rRunning the command - please wait   ${sp:i++%${#sp}:1} ";
+    sleep 0.5;
+  done &
+  $@
+  kill $!; trap 'kill $!' SIGTERM;
+}
+
+### --post
