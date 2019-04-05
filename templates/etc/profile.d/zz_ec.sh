@@ -16,6 +16,10 @@ alias mkdir='mkdir -pv'
 alias :q="exit"
 alias :Q="exit"
 
+# Handle UTF-8 with less
+export LESSCHARSET=utf-8
+
+
 #History
 shopt -s histappend
 shopt -s cmdhist
