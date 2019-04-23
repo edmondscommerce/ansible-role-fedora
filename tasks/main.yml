@@ -20,6 +20,7 @@
       - python2-libselinux
       - gnome-tweak-tool
       - htop
+      - gnote
 
 - name: Bash Profile
   copy:
