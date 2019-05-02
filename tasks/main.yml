@@ -21,6 +21,18 @@
       - gnome-tweak-tool
       - htop
       - gnote
+      - terminator
+
+- name: Fedora 30 Specific Packages
+  package:
+    name: "{{ packages }}"
+    state: present
+  vars:
+    packages:
+      - python3-pexpect
+      - python3-psutil
+  when:
+    - ansible_facts['distribution_major_version'] == "30"
 
 - name: Bash Profile
   copy:
