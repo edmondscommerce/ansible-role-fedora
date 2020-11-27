@@ -59,7 +59,7 @@
 
 - name: Dont Send Locale over SSH
   replace:
-    path: /etc/ssh/ssh_config.d/05-redhat.conf
+    path: /etc/ssh/ssh_config.d/50-redhat.conf
     regexp: '^[^#]+?SendEnv'
     replace: '#   SendEnv'
 
