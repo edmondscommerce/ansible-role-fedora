@@ -17,7 +17,6 @@
       - vim
       - wget
       - bash-completion
-      - python2-libselinux
       - gnome-tweak-tool
       - htop
       - gnote
