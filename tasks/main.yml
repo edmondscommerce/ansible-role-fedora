@@ -17,10 +17,21 @@
       - vim
       - wget
       - bash-completion
-      - python2-libselinux
       - gnome-tweak-tool
       - htop
       - gnote
+      - terminator
+
+- name: Fedora 30 Specific Packages
+  package:
+    name: "{{ packages }}"
+    state: present
+  vars:
+    packages:
+      - python3-pexpect
+      - python3-psutil
+  when:
+    - ansible_facts['distribution_major_version'] == "30"
 
 - name: Bash Profile
   copy:
@@ -46,9 +57,23 @@
       export LC_ALL
     dest: /etc/profile.d/zz_locale.sh
 
+- name: Set ssh filename (Fedora 30)
+  set_fact:
+    ssh_config_file: /etc/ssh/ssh_config.d/05-redhat.conf
+  when:
+    - ansible_distribution == 'Fedora'
+    - ansible_distribution_major_version | int <= 30
+
+- name: Set ssh filename (Fedora 30+)
+  set_fact:
+    ssh_config_file: /etc/ssh/ssh_config.d/50-redhat.conf
+  when:
+    - ansible_distribution == 'Fedora'
+    - ansible_distribution_major_version | int > 30
+
 - name: Dont Send Locale over SSH
   replace:
-    path: /etc/ssh/ssh_config.d/05-redhat.conf
+    path: "{{ ssh_config_file }}"
     regexp: '^[^#]+?SendEnv'
     replace: '#   SendEnv'
 
