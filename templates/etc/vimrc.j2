@@ -137,8 +137,10 @@ au BufRead,BufNewFile *.md setlocal wrap linebreak nolist
 " ====== Default nice colour scheme ===============
 colors deus
 
+{% if ec_fedora.vim.relative_lines == true %}
 " ====== Set relative numbers nicely ==============
 set relativenumber
+{% endif %}
 
 augroup numbertoggle
   autocmd!

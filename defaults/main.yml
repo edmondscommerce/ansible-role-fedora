@@ -10,3 +10,12 @@ default_gnome_extensions:
     url: "https://extensions.gnome.org/extension-data/multi-monitors-add-on%40spin83.v17.shell-extension.zip"
   - name: "topicons"
     url:
+
+ec_fedora:
+  vim:
+    rc: true
+    rc_path: ./../templates/etc/vimrc.j2
+    colour_scheme: true
+    colour_scheme_path: ./../templates/usr/share/vim/vimfiles/colors/deus.vim
+
+    relative_lines: false

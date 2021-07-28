@@ -39,14 +39,16 @@
     dest: /etc/profile.d/zz_ec.sh
 
 - name: Vimrc
-  copy:
-    src: ./../templates/etc/vimrc
+  template:
+    src: "{{ ec_fedora.vim.rc_path }}"
     dest: /etc/vimrc
+  when: ec_fedora.vim.rc == true
 
 - name: Vim colour scheme
   copy:
-    src: ./../templates/usr/share/vim/vimfiles/colors/deus.vim
+    src: "{{ ec_fedora.vim.colour_scheme_path }}"
     dest: /usr/share/vim/vimfiles/colors/deus.vim
+  when: ec_fedora.vim.colour_scheme == true
 
 - name: Locale
   copy:
@@ -96,11 +98,6 @@
 
 - name: Set hostname to match ansible hostname
   command: hostnamectl set-hostname "{{ inventory_hostname }}"
-
-- name: gsettings
-  shell: |
-    gsettings set org.gnome.settings-daemon.plugins.xsettings antialiasing "rgba"
-    gsettings set org.gnome.settings-daemon.plugins.xsettings hinting "slight"
 
 - name: Harden SSH
   lineinfile:
