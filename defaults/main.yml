@@ -13,9 +13,8 @@ default_gnome_extensions:
 
 ec_fedora:
   vim:
-    rc: true
-    rc_path: ./../templates/etc/vimrc.j2
-    colour_scheme: true
-    colour_scheme_path: ./../templates/usr/share/vim/vimfiles/colors/deus.vim
-
-    relative_lines: false
+    rc: true # Disable RC template
+    rc_path: ./../templates/etc/vimrc.j2 # Custom RC path
+    colour_scheme: true # Disable Vim colour scheme
+    colour_scheme_path: ./../templates/usr/share/vim/vimfiles/colors/deus.vim # Custom colour scheme path
+    relative_lines: false # Relative lines
