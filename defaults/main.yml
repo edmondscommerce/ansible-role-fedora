@@ -18,3 +18,5 @@ ec_fedora:
     colour_scheme: true # Disable Vim colour scheme
     colour_scheme_path: ./../templates/usr/share/vim/vimfiles/colors/deus.vim # Custom colour scheme path
     relative_lines: false # Relative lines
+  ssh:
+    update_port: false
